@@ -13,7 +13,7 @@ COPY . .
 
 EXPOSE 3000
 
-VOLUME ["/usr/src/garie-ssslabs/reports", "/usr/src/garie-lighthouse/logs"]
+VOLUME ["/usr/src/garie-ssslabs/reports", "/usr/src/garie-ssslabs/logs"]
 
 ENTRYPOINT ["/usr/src/garie-ssslabs/docker-entrypoint.sh"]
 
