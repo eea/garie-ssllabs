@@ -1,9 +1,9 @@
 FROM node:8.10.0
 
-RUN mkdir -p /usr/src/garie-ssslabs
-RUN mkdir -p /usr/src/garie-ssslabs/reports
+RUN mkdir -p /usr/src/garie-ssllabs
+RUN mkdir -p /usr/src/garie-ssllabs/reports
 
-WORKDIR /usr/src/garie-ssslabs
+WORKDIR /usr/src/garie-ssllabs
 
 COPY package.json .
 
@@ -13,8 +13,8 @@ COPY . .
 
 EXPOSE 3000
 
-VOLUME ["/usr/src/garie-ssslabs/reports", "/usr/src/garie-ssslabs/logs"]
+VOLUME ["/usr/src/garie-ssllabs/reports", "/usr/src/garie-ssllabs/logs"]
 
-ENTRYPOINT ["/usr/src/garie-ssslabs/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/src/garie-ssllabs/docker-entrypoint.sh"]
 
 CMD ["npm", "start"]

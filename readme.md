@@ -1,30 +1,30 @@
-![reports](./screenshots/ssslabs-logo.png 'Reports')
+![reports](./screenshots/ssllabs-logo.png 'Reports')
 
 <p align="center">
-  <p align="center">Tool to gather ssslabs metrics and supports CRON jobs and webhooks.<p>
+  <p align="center">Tool to gather ssllabs metrics and supports CRON jobs and webhooks.<p>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT"></a>
   </p>
 </p>
 
 **Highlights**
 
--   Poll for ssslabs performance metrics on any website and stores the data into InfluxDB
+-   Poll for ssllabs performance metrics on any website and stores the data into InfluxDB
 -   Webhook support
 -   Generates web performance videos
 -   View all historic reports.
 -   Setup within minutes
 
-## Overview of garie-ssslabs
+## Overview of garie-ssllabs
 
-Garie-ssslabs was developed as a plugin for the [Garie](https://github.com/boyney123/garie) Architecture.
+Garie-ssllabs was developed as a plugin for the [Garie](https://github.com/boyney123/garie) Architecture.
 
-[Garie](https://github.com/boyney123/garie) is an out the box web performance toolkit, and `garie-ssslabs` is a plugin that generates and stores ssslabs data into `InfluxDB`.
+[Garie](https://github.com/boyney123/garie) is an out the box web performance toolkit, and `garie-ssllabs` is a plugin that generates and stores ssllabs data into `InfluxDB`.
 
-`Garie-ssslabs` can also be run outside the `Garie` environment and run as standalone.
+`Garie-ssllabs` can also be run outside the `Garie` environment and run as standalone.
 
-If your interested in an out the box solution that supports multiple performance tools like `ssslabs`, `google-speed-insight` and `lighthouse` then checkout [Garie](https://github.com/boyney123/garie).
+If your interested in an out the box solution that supports multiple performance tools like `ssllabs`, `google-speed-insight` and `lighthouse` then checkout [Garie](https://github.com/boyney123/garie).
 
-If you want to run `garie-ssslabs` standalone you can find out how below.
+If you want to run `garie-ssllabs` standalone you can find out how below.
 
 ## Getting Started
 
@@ -32,14 +32,14 @@ If you want to run `garie-ssslabs` standalone you can find out how below.
 
 -   Docker installed
 
-### Running garie-ssslabs
+### Running garie-ssllabs
 
 You can get setup with the basics in a few minutes.
 
 First clone the repo.
 
 ```sh
-git clone git@github.com:eea/garie-ssslabs.git
+git clone git@github.com:eea/garie-ssllabs.git
 ```
 
 Next setup you're config. Edit the `config.json` and add websites to the list.
@@ -64,23 +64,23 @@ Next setup you're config. Edit the `config.json` and add websites to the list.
 Once you finished edited your config, lets build our docker image and setup our environment.
 
 ```sh
-docker build -t garie-ssslabs . && docker-compose up
+docker build -t garie-ssllabs . && docker-compose up
 ```
 
-This will build your copy of `garie-ssslabs` and run the application.
+This will build your copy of `garie-ssllabs` and run the application.
 
-On start garie-ssslabs will start to gather performance metrics for the websites added to the `config.json`.
+On start garie-ssllabs will start to gather performance metrics for the websites added to the `config.json`.
 
 ## Viewing reports
 
-Viewing ssslabs reports is straight forward. Once you have your application running just go to `localhost:3000/reports` and you should see all the reports ssslabs has generated.
+Viewing ssllabs reports is straight forward. Once you have your application running just go to `localhost:3000/reports` and you should see all the reports ssllabs has generated.
 
 ![reports](./screenshots/reports.png 'Reports')
-![reports](./screenshots/ssslabs.gif 'Reports')
+![reports](./screenshots/ssllabs.gif 'Reports')
 
 ## Webhook
 
-Garie-ssslabs also supports webhooks. You will need to `POST` to `localhost:3000/collect`.
+Garie-ssllabs also supports webhooks. You will need to `POST` to `localhost:3000/collect`.
 
 **Payload**
 
@@ -101,10 +101,10 @@ Garie-ssslabs also supports webhooks. You will need to `POST` to `localhost:3000
 | Property | Type                | Description                                                                          |
 | -------- | ------------------- | ------------------------------------------------------------------------------------ |
 | `cron`   | `string` (optional) | Cron timer. Supports syntax can be found [here].(https://www.npmjs.com/package/cron) |
-| `urls`   | `object` (required) | Config for ssslabs. More detail below                                            |
+| `urls`   | `object` (required) | Config for ssllabs. More detail below                                            |
 
 **urls object**
 
 | Property | Type                | Description                         |
 | -------- | ------------------- | ----------------------------------- |
-| `url`    | `string` (required) | Url to get ssslabs metrics for. |
+| `url`    | `string` (required) | Url to get ssllabs metrics for. |

@@ -3,8 +3,8 @@ set -e
 
 
 if [ -n "$CONFIG" ]; then
-	echo "Found configuration variable, will write it to the /usr/src/garie-ssslabs/config.json"
-	echo "$CONFIG" > /usr/src/garie-ssslabs/config.json
+	echo "Found configuration variable, will write it to the /usr/src/garie-ssllabs/config.json"
+	echo "$CONFIG" > /usr/src/garie-ssllabs/config.json
 fi
 
 exec "$@"
