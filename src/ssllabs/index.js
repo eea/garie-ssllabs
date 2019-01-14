@@ -27,12 +27,54 @@ function pathNameFromUrl(url) {
 }
 
 function reportDir(url) {
-	return path.join(__dirname, '../../reports/ssllabs-results', pathNameFromUrl(url));
+    return path.join(__dirname, '../../reports/ssllabs-results', pathNameFromUrl(url));
+}
+
+function getResults(url, file) {
+    const regex = RegExp('"'+url+'": "(.*)"', 'g');
+
+    const grade = regex.exec(file);
+
+    var result = {};
+
+    const key = 'ssl_score';
+
+    console.log("Received score "+grade[1]+" for "+url);
+
+    switch(grade[1]){
+        case 'A+':
+            result[key] = 100;
+            break;
+        case 'A':
+            result[key] = 90;
+            break;
+        case 'A-':
+            result[key] = 80;
+            break;
+        case 'B':
+            result[key] = 65;
+            break;
+        case 'C':
+            result[key] = 50;
+            break;
+        case 'D':
+            result[key] = 35;
+            break;
+        case 'E':
+            result[key] = 20;
+            break;
+        case 'F':
+            result[key] = 10;
+            break;
+        default:
+        result[key] = 0;
+    }
+    return result;
+
 }
 
 const getSSLLabsResult = (url = '') => {
     try {
-
         const folders = fs.readdirSync(reportDir(url));
 
         const sortFoldersByTime = folders.sort(function(a, b) {
@@ -43,46 +85,7 @@ const getSSLLabsResult = (url = '') => {
 
         const ssllabsFile = fs.readFileSync(path.join(reportDir(url), newestFolder, 'ssllabs.html'));
 
-        const regex = RegExp('"'+url+'": "(.*)"', 'g');       
-
-	const grade = regex.exec(ssllabsFile);
-   
-	var result = {};
-	    
-        const key = 'ssl_score';
-	
-	console.log("Received score "+grade[1]+" for "+url);
-
-	switch(grade[1]){
-		case 'A+':
-	           result[key] = 100;
-                        break;
-		case 'A':
-	           result[key] = 90;
-			break;
-                case 'A-':
-                   result[key] = 80;
-                        break;
-                case 'B':
-                   result[key] = 65;
-                        break;
-                case 'C':
-                   result[key] = 50;
-                        break;
-                case 'D':
-                   result[key] = 35;
-                        break;
-                case 'E':
-                   result[key] = 20;
-                        break;
-                case 'F':
-                   result[key] = 10;
-                        break;
-                default:
-                     result[key] = 0;
-	}   
-
-        return Promise.resolve(result);
+        return Promise.resolve(getResults(url, ssllabsFile));
 
     } catch (err) {
         console.log(err);
@@ -114,5 +117,6 @@ const getData = async url => {
 
 module.exports = {
     getSSLLabsResult,
-    getData
+    getData,
+    getResults
 };

@@ -1,8 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const child_process = require('child_process');
-const { getSSLLabsResult, getData } = require('./');
-const ssllabsTestData = require('../../test/mock-data/result.html');
+const { getSSLLabsResult, getData, getResults } = require('./');
+
+const ssllabsTestData = fs.readFileSync('./test/mock-data/result.html');
 
 jest.mock('child_process', () => {
     return {
@@ -24,7 +25,8 @@ describe('ssllabs', () => {
         const filePath = path.join(__dirname, '../../reports/ssllabs-results/google.com', today.toISOString());
         fs.ensureDirSync(filePath);
 
-        fs.writeJsonSync(path.join(filePath, 'ssllabs.json'), ssllabsTestData);
+        fs.writeFileSync(path.join(filePath, 'ssllabs.html'), ssllabsTestData);
+
     })
 
     afterEach(() => {
@@ -37,7 +39,7 @@ describe('ssllabs', () => {
 
             const result = await getSSLLabsResult('google.com');
 
-            expect(result).toEqual(ssllabsTestData);
+            expect(result).toEqual(getResults('google.com', ssllabsTestData));
 
         });
 
@@ -53,9 +55,9 @@ describe('ssllabs', () => {
         it('calls the shell script to get the data from ssllabs docker image and resolves with the ssllabs file flattened when succesfully finished', async () => {
 
             const data = await getData('google.com');
-            expect(child_process.spawn).toBeCalledWith('bash', [path.join(__dirname, './ssllabs.sh'), 'google.com']);
+            expect(child_process.spawn).toBeCalledWith('bash', [path.join(__dirname, './ssllabs.sh'), 'google.com', "/usr/src/garie-ssllabs/reports/ssllabs-results/google.com"]);
 
-            expect(data).toEqual(ssllabsTestDataFlat);
+            expect(data).toEqual(getResults('google.com', ssllabsTestData));
 
 
         });
