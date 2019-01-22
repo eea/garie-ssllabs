@@ -31,7 +31,8 @@ function reportDir(url) {
 }
 
 function getResults(url, file) {
-    const regex = RegExp('"'+url+'": "(.*)"', 'g');
+
+    const regex = RegExp('"'+url.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')+'": "(.*)"', 'g');
 
     const grade = regex.exec(file);
 
