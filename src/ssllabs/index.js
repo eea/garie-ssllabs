@@ -39,6 +39,13 @@ function getResults(url, file) {
 
     const key = 'ssl_score';
 
+    if (grade == null){
+	console.log("Did not receive a score, will set 0"); 
+	console.log(file);
+	result[key] = 0;
+	return result
+    }
+
     console.log("Received score "+grade[1]+" for "+url);
 
     switch(grade[1]){
@@ -79,7 +86,7 @@ const getSSLLabsResult = (url = '') => {
 
         const newestFolder = folders[folders.length - 1];
 
-        const ssllabsFile = fs.readFileSync(path.join(reportDir(url), newestFolder, 'ssllabs.html'));
+        const ssllabsFile = fs.readFileSync(path.join(reportDir(url), newestFolder, 'ssllabs.html'), "utf8");
 
         return Promise.resolve(getResults(url, ssllabsFile));
 
