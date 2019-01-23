@@ -27,7 +27,7 @@ const init = async () => {
 const saveData = async (url, data) => {
     try {
         const points = Object.keys(data).reduce((points, key) => {
-            if (data[key]) {
+            if (data[key] !=null ) {
                 points.push({
                     measurement: key,
                     tags: { url },
