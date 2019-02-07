@@ -1,78 +1,115 @@
-const CronJob = require('cron').CronJob;
-const express = require('express');
-const serveIndex = require('serve-index');
-const bodyParser = require('body-parser');
-
-const collect = require('./routes/collect');
-const logger = require('./utils/logger');
+const garie_plugin = require('garie-plugin')
+const path = require('path');
 const config = require('../config');
+const express = require('express');
+const bodyParser = require('body-parser');
+const serveIndex = require('serve-index');
 
-const { init, saveData } = require('./influx');
 
-const { getData } = require('./ssllabs');
+function getResults(url, file) {
+    const regex = RegExp('"'+url+'": "(.*)"', 'g');
 
-const app = express();
-app.use(bodyParser.json());
+    const grade = regex.exec(file);
 
-const { urls, cron } = config;
+    var result = {};
 
-app.use('/collect', collect);
-app.use('/reports', express.static('reports'), serveIndex('reports', { icons: true }));
+    const key = 'ssl_score';
 
-const getDataForAllUrls = async () => {
-    for (const item of urls) {
-        try {
-            const { url } = item;
-            const data = await getData(url);
-            await saveData(url, data);
-        } catch (err) {
-            logger.error(`Failed to parse ${url}`, err);
-        }
+    if (grade == null){
+        console.log("Did not receive a score, will set 0"); 
+        console.log(file);
+        result[key] = 0;
+        return result
     }
-};
 
-const main = async () => {
-    await init();
+    console.log("Received score "+grade[1]+" for "+url);
 
-    try {
-        if (cron) {
-            return new CronJob(
-                cron,
-                async () => {
-                    getDataForAllUrls();
-                },
-                null,
-                true,
-                'Europe/London',
-                null,
-                true
-            );
-        }
-    } catch (err) {
-        console.log(err);
+    switch(grade[1]){
+        case 'A+':
+            result[key] = 100;
+            break;
+        case 'A':
+            result[key] = 90;
+            break;
+        case 'A-':
+            result[key] = 80;
+            break;
+        case 'B':
+            result[key] = 65;
+            break;
+        case 'C':
+            result[key] = 50;
+            break;
+        case 'D':
+            result[key] = 35;
+            break;
+        case 'E':
+            result[key] = 20;
+            break;
+        case 'F':
+            result[key] = 10;
+            break;
+        default:
+        result[key] = 0;
     }
-};
+    return result;
 
-if (process.env.ENV !== 'test') {
-    app.listen(3000, async () => {
-        console.log('Application listening on port 3000');
-        await main();
-    });
 }
 
-module.exports = {
-    main,
-    app
+
+const myGetFile = async (options) => {
+    const { url } = options;
+    options.fileName = 'ssllabs.html';
+    const file = await garie_plugin.utils.helpers.getNewestFile(options);
+    return getResults(url, file);
+}
+
+const myGetData = async (item) => {
+    const { url } = item.url_settings;
+    return new Promise(async (resolve, reject) => {
+        try {
+            const { extra_option } = item.url_settings;
+            const { reportDir } = item;
+
+            const options = { script: path.join(__dirname, './ssllabs.sh'),
+                        url: url,
+                        reportDir: reportDir,
+                        params: [ extra_option ],
+                        callback: myGetFile
+                    }
+            data = await garie_plugin.utils.helpers.executeScript(options);
+
+// my code to get the data for a url
+
+            resolve(data);
+        } catch (err) {
+            console.log(`Failed to get data for ${url}`, err);
+            reject(`Failed to get data for ${url}`);
+        }
+    });
 };
 
-/**
- * Parse the data and store into InfluxDB
- * Test docker image with the Garie Architecture.
- * Tidy up the project
- * Write tests and test coverage
- * Get into Github and open sourced
- * Setup CI and codecoverage
- *
- * Why isnt it being run every 2 minutes into the database and visualise?
- *
- */
+
+
+console.log("Start");
+
+
+const app = express();
+app.use('/reports', express.static('reports'), serveIndex('reports', { icons: true }));
+
+const main = async () => {
+  garie_plugin.init({
+    database:'ssllabs',
+    getData:myGetData,
+    app_name:'ssllabs',
+    app_root: path.join(__dirname, '..'),
+    config:config
+  });
+}
+
+if (process.env.ENV !== 'test') {
+  app.listen(3000, async () => {
+    console.log('Application listening on port 3000');
+    await main();
+  });
+}
