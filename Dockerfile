@@ -7,13 +7,13 @@ WORKDIR /usr/src/garie-ssllabs
 
 COPY package.json .
 
-RUN npm install
+RUN cd /usr/src/garie-ssllabs && npm install
 
 COPY . .
 
 EXPOSE 3000
 
-VOLUME ["/usr/src/garie-ssllabs/reports", "/usr/src/garie-ssllabs/logs"]
+VOLUME ["/usr/src/garie-ssllabs/reports"]
 
 ENTRYPOINT ["/usr/src/garie-ssllabs/docker-entrypoint.sh"]
 
