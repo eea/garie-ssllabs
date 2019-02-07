@@ -2,12 +2,10 @@
   "cron": "0 */4 * * *",
   "urls": [
     {
-      "url": "https://www.eea.europa.eu/",
-      "extra_option": 1
+      "url": "https://www.eea.europa.eu/"
     },
     {
-      "url": "https://biodiversity.europa.eu/",
-      "extra_option": 2
+      "url": "https://biodiversity.europa.eu/"
     }
   ]
 }

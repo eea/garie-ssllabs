@@ -59,8 +59,9 @@ function getResults(url, file) {
 
 const myGetFile = async (options) => {
     const { url } = options;
-    options.fileName = 'ssllabs.html';
-    const file = await garie_plugin.utils.helpers.getNewestFile(options);
+    options.fileName = 'ssllabs.txt';
+    var file = await garie_plugin.utils.helpers.getNewestFile(options);
+    file = file.toString('utf8');
     return getResults(url, file);
 }
 
@@ -68,13 +69,12 @@ const myGetData = async (item) => {
     const { url } = item.url_settings;
     return new Promise(async (resolve, reject) => {
         try {
-            const { extra_option } = item.url_settings;
             const { reportDir } = item;
 
             const options = { script: path.join(__dirname, './ssllabs.sh'),
                         url: url,
                         reportDir: reportDir,
-                        params: [ extra_option ],
+                        params: [ ],
                         callback: myGetFile
                     }
             data = await garie_plugin.utils.helpers.executeScript(options);
