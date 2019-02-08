@@ -101,7 +101,7 @@ const main = async () => {
   garie_plugin.init({
     database:'ssllabs',
     getData:myGetData,
-    app_name:'ssllabs',
+    app_name:'ssllabs-results',
     app_root: path.join(__dirname, '..'),
     config:config
   });
