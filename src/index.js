@@ -75,11 +75,10 @@ const myGetData = async (item) => {
                         url: url,
                         reportDir: reportDir,
                         params: [ ],
+                        timeout: 600,
                         callback: myGetFile
                     }
             data = await garie_plugin.utils.helpers.executeScript(options);
-
-// my code to get the data for a url
 
             resolve(data);
         } catch (err) {
@@ -99,9 +98,10 @@ app.use('/reports', express.static('reports'), serveIndex('reports', { icons: tr
 
 const main = async () => {
   garie_plugin.init({
-    database:'ssllabs',
+    db_name:'ssllabs',
     getData:myGetData,
-    app_name:'ssllabs-results',
+    plugin_name:'ssllabs',
+    report_folder_name:'ssllabs-results',
     app_root: path.join(__dirname, '..'),
     config:config
   });
