@@ -16,7 +16,7 @@ function getResults(url, file) {
     const key = 'ssl_score';
 
     if (grade == null){
-        console.log("Did not receive a score, will set 0"); 
+        console.log("Did not receive a score, will set 0");
         console.log(file);
         result[key] = 0;
         return result
