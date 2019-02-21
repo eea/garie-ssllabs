@@ -75,7 +75,6 @@ const myGetData = async (item) => {
                         url: url,
                         reportDir: reportDir,
                         params: [ ],
-                        timeout: 600,
                         callback: myGetFile
                     }
             data = await garie_plugin.utils.helpers.executeScript(options);
