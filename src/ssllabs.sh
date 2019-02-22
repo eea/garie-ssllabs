@@ -9,7 +9,7 @@ report_location=$2/$(date +"%FT%H%M%S+0000")
 
 mkdir -p $report_location
 
-timeout 1800 docker run --read-only --cap-drop all --rm jumanjiman/ssllabs-scan:latest -grade -usecache $1 > $report_location/ssllabs.txt 2>&1
+timeout 1800 docker run --read-only --cap-drop all --rm jumanjiman/ssllabs-scan:latest -grade $1 > $report_location/ssllabs.txt 2>&1
 
 echo "" >> $report_location/ssllabs.txt
 
