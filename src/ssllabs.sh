@@ -11,6 +11,20 @@ mkdir -p $report_location
 
 timeout 1800 docker run --read-only --cap-drop all --rm jumanjiman/ssllabs-scan:latest -grade -usecache $1 > $report_location/ssllabs.txt 2>&1
 
+echo "" >> $report_location/ssllabs.txt
+
+echo "To re-run the test online, try:" >>  $report_location/ssllabs.txt
+
+
+url=$(echo $1 | awk -F[/:] '{print $4}')
+
+# if null, will keep the old format
+url=${url:-$1}
+
+
+echo "https://www.ssllabs.com/ssltest/analyze.html?d=${url}&hideResults=on"   >>  $report_location/ssllabs.txt
+
+
 echo "Finished getting data for: $1"
 
 exit 0
