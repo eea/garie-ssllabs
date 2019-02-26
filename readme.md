@@ -1,7 +1,7 @@
 ![reports](./screenshots/ssllabs-logo.png 'Reports')
 
 <p align="center">
-  <p align="center">Tool to gather ssllabs metrics and supports CRON jobs and webhooks.<p>
+  <p align="center">Tool to gather ssllabs metrics and supports CRON jobs.<p>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT"></a>
   </p>
 </p>
@@ -9,7 +9,6 @@
 **Highlights**
 
 -   Poll for ssllabs performance metrics on any website and stores the data into InfluxDB
--   Webhook support
 -   Generates web performance videos
 -   View all historic reports.
 -   Setup within minutes
@@ -46,55 +45,31 @@ Next setup you're config. Edit the `config.json` and add websites to the list.
 
 ```javascript
 {
-	"cron": "00 00 */6 * * *",
-	"urls": [
-		{
-			"url": "https://www.comparethemarket.com"
-		},
-		{
-			"url": "https://www.bbc.co.uk"
-		},
-		{
-			"url": "https://www.cnn.com"
-		}
-	]
+  "plugins":{
+        "ssllabs":{
+            "cron": "0 */4 * * *"
+        }
+    },
+  "urls": [
+    {
+      "url": "https://www.eea.europa.eu/"
+    },
+    {
+      "url": "https://biodiversity.europa.eu/"
+    }
+  ]
 }
 ```
 
-Once you finished edited your config, lets build our docker image and setup our environment.
+Once you finished edited your config, lets setup our environment.
 
 ```sh
-docker build -t garie-ssllabs . && docker-compose up
+docker-compose up
 ```
 
 This will build your copy of `garie-ssllabs` and run the application.
 
 On start garie-ssllabs will start to gather performance metrics for the websites added to the `config.json`.
-
-## Viewing reports
-
-Viewing ssllabs reports is straight forward. Once you have your application running just go to `localhost:3000/reports` and you should see all the reports ssllabs has generated.
-
-![reports](./screenshots/reports.png 'Reports')
-![reports](./screenshots/ssllabs.gif 'Reports')
-
-## Webhook
-
-Garie-ssllabs also supports webhooks. You will need to `POST` to `localhost:3000/collect`.
-
-**Payload**
-
-| Property | Type                | Description             |
-| -------- | ------------------- | ----------------------- |
-| `url`    | `string` (required) | Url to get metrics for. |
-
-**Payload Example**
-
-```javascript
-{
-  "url": "https://www.bbc.co.uk"
-}
-```
 
 ## config.json
 
