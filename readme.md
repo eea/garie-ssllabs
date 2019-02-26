@@ -1,4 +1,4 @@
-![reports](./screenshots/ssllabs-logo.png 'Reports')
+# Garie ssllabs plugin
 
 <p align="center">
   <p align="center">Tool to gather ssllabs metrics and supports CRON jobs.<p>
