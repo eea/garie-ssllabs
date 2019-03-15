@@ -7,9 +7,9 @@ const serveIndex = require('serve-index');
 
 
 function getResults(url, file) {
-    const regex = RegExp('"'+url+'": "(.*)"', 'g');
+    const regex = RegExp('"[0-9|\.]*":"(.*)"', 'g');
 
-    const grade = regex.exec(file);
+    var grade = regex.exec(file);
 
     var result = {};
 
@@ -21,6 +21,12 @@ function getResults(url, file) {
         result[key] = 0;
         return result
     }
+    
+    var count = 0;
+
+    var sum = 0;
+
+    while (grade != null) {
 
     console.log("Received score "+grade[1]+" for "+url);
 
@@ -52,6 +58,14 @@ function getResults(url, file) {
         default:
         result[key] = 0;
     }
+	sum = sum + result[key];
+	count = count+1;
+        grade = regex.exec(file);    
+
+     } 
+     
+    result[key] = sum / count;
+    console.log(`Final score ${result[key]}`);
     return result;
 
 }
