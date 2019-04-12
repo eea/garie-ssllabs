@@ -75,7 +75,11 @@ On start garie-ssllabs will start to gather performance metrics for the websites
 
 | Property | Type                | Description                                                                          |
 | -------- | ------------------- | ------------------------------------------------------------------------------------ |
-| `cron`   | `string` (optional) | Cron timer. Supports syntax can be found [here].(https://www.npmjs.com/package/cron) |
+| `plugins.sslabs.cron`   | `string` (optional) | Cron timer. Supports syntax can be found [here].(https://www.npmjs.com/package/cron) |
+| `plugins.sslabs.retry`   | `object` (optional) | Configuration how to retry the failed tasks |
+| `plugins.sslabs.retry.after`   | `number` (optional, default 30) | Minutes before we retry to execute the tasks |
+| `plugins.sslabs.retry.times`   | `number` (optional, default 3) | How many time to retry to execute the failed tasks |
+| `plugins.sslabs.retry.timeRange`   | `number` (optional, default 360) | Period in minutes to be checked in influx, to know if a task failed |
 | `urls`   | `object` (required) | Config for ssllabs. More detail below                                            |
 
 **urls object**

@@ -21,7 +21,7 @@ function getResults(url, file) {
         result[key] = 0;
         return result
     }
-    
+
     var count = 0;
 
     var sum = 0;
@@ -58,12 +58,11 @@ function getResults(url, file) {
         default:
         result[key] = 0;
     }
-	sum = sum + result[key];
-	count = count+1;
-        grade = regex.exec(file);    
+        sum = sum + result[key];
+        count = count+1;
+        grade = regex.exec(file);
 
      } 
-     
     result[key] = sum / count;
     console.log(`Final score ${result[key]}`);
     return result;
