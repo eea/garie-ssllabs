@@ -1,6 +1,6 @@
 {
     "name": "garie-ssllabs",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Browertime image for performance metrics",
     "license": "MIT",
     "repository": "eeacms/garie-ssllabs",
@@ -17,7 +17,7 @@
         "start": "node ./src/index.js"
     },
     "dependencies": {
-        "garie-plugin": "https://github.com/eea/garie-plugin#0.0.10"
+        "garie-plugin": "https://github.com/eea/garie-plugin#0.0.12"
     },
     "devDependencies": {
         "codecov": "^3.0.0",
