@@ -16,55 +16,63 @@ function getResults(url, file) {
     const key = 'ssl_score';
 
     if (grade == null){
-        console.log("Did not receive a score, will set 0");
-        console.log(file);
-        result[key] = 0;
-        return result
+        console.log(`Did not receive a score for ${url}`);
+        throw(`Did not receive a score for ${url}`)
     }
 
     var count = 0;
 
     var sum = 0;
 
+    var certificate_not_valid = false;
+
     while (grade != null) {
 
-    console.log("Received score "+grade[1]+" for "+url);
+        console.log("Received score "+grade[1]+" for "+url);
 
-    switch(grade[1]){
-        case 'A+':
-            result[key] = 100;
-            break;
-        case 'A':
-            result[key] = 90;
-            break;
-        case 'A-':
-            result[key] = 80;
-            break;
-        case 'B':
-            result[key] = 65;
-            break;
-        case 'C':
-            result[key] = 50;
-            break;
-        case 'D':
-            result[key] = 35;
-            break;
-        case 'E':
-            result[key] = 20;
-            break;
-        case 'F':
-            result[key] = 10;
-            break;
-        default:
-        result[key] = 0;
-    }
+        switch(grade[1]){
+            case 'A+':
+                result[key] = 100;
+                break;
+            case 'A':
+                result[key] = 90;
+                break;
+            case 'A-':
+                result[key] = 80;
+                break;
+            case 'B':
+                result[key] = 65;
+                break;
+            case 'C':
+                result[key] = 50;
+                break;
+            case 'D':
+                result[key] = 35;
+                break;
+            case 'E':
+                result[key] = 20;
+                break;
+            case 'F':
+                result[key] = 10;
+                break;
+            case 'Certificate not valid for domain name':
+                certificate_not_valid = true;
+            default:
+                result[key] = 0;
+        }
         sum = sum + result[key];
         count = count+1;
         grade = regex.exec(file);
 
-     } 
-    result[key] = sum / count;
-    console.log(`Final score ${result[key]}`);
+    }
+
+    if (certificate_not_valid){
+        result = {}
+    }
+    else {
+        result[key] = sum / count;
+        console.log(`Final score ${result[key]}`);
+    }
     return result;
 
 }
