@@ -67,7 +67,7 @@ function getResults(url, file) {
     }
 
     if (certificate_not_valid){
-        result = {}
+        result[key] = 0
     }
     else {
         result[key] = sum / count;
