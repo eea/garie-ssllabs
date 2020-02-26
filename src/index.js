@@ -114,7 +114,47 @@ console.log("Start");
 
 
 const app = express();
+app.use(bodyParser.json());
+
 app.use('/reports', express.static('reports'), serveIndex('reports', { icons: true }));
+
+const scanQueue = {};
+
+const launchScanOnDemand = async (url, scan) => {
+  try {
+    const data = await myGetData({
+      url_settings: { url },
+      reportDir: garie_plugin.utils.helpers.reportDir({
+        url,
+        report_folder_name: 'on-demand/ssllabs-results',
+        app_root: path.join(__dirname, '..'),
+      }),
+    });
+    scan.result = data;
+    scan.state = 'success';
+  } catch(err) {
+    console.error(err);
+    scan.state = 'error';
+  }
+}
+
+const scanOnDemand = (url) => {
+  const scan = {
+    id: new Date().getTime(),
+    state: 'inprogress',
+  };
+  scanQueue[scan.id] = scan;
+  launchScanOnDemand(url, scan);
+  return scan;
+}
+
+app.post('/scan', async (req, res) => {
+  res.send(scanOnDemand(req.body.url));
+})
+
+app.get('/scan/:id', (req, res) => {
+  res.send(scanQueue[req.params.id]);
+})
 
 const main = async () => {
   return new Promise(async (resolve, reject) => {
