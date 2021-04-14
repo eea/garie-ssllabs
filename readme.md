@@ -93,3 +93,4 @@ CRON_DELETE_OLD_REPORTS - cronjob (default to '0 5 * * *') The frequency of chec
 | `url`    | `string` (required) | Url to get ssllabs metrics for. |
 
 For more information please go to the [garie-plugin](https://github.com/eea/garie-plugin) repo.
+
