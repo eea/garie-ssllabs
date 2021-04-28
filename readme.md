@@ -80,11 +80,9 @@ On start garie-ssllabs will start to gather performance metrics for the websites
 | `plugins.sslabs.retry.after`   | `number` (optional, default 30) | Minutes before we retry to execute the tasks |
 | `plugins.sslabs.retry.times`   | `number` (optional, default 3) | How many time to retry to execute the failed tasks |
 | `plugins.sslabs.retry.timeRange`   | `number` (optional, default 360) | Period in minutes to be checked in influx, to know if a task failed |
-| `urls`   | `object` (required) | Config for ssllabs. More detail below                                            |
-
-MAX_AGE_OF_REPORT_FILES - int (default to 365), Maximum age (in days) of report files that can be deleted.
-MAX_AGE_OF_REPORT_VIDEOS - int (default to 100), Maximum age (in days) of report videos that can be deleted.
-CRON_DELETE_OLD_REPORTS - cronjob (default to '0 5 * * *') The frequency of checking old report files / videos.
+| `plugins.sslabs.MAX_AGE_OF_REPORT_FILES`   | `number` (optional, default 365) | Maximum age (in days) of report files that can be deleted. |
+| `plugins.sslabs.MAX_AGE_OF_REPORT_VIDEOS`   | `number` (optional, default 100) | Maximum age (in days) of report videos that can be deleted. |
+| `urls`   | `object` (required) | Config for lighthouse. More detail below |
 
 **urls object**
 
