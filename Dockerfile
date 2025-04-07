@@ -1,4 +1,10 @@
-FROM node:8.15.1
+FROM golang:1-bookworm AS builder
+WORKDIR /app
+RUN go install github.com/ssllabs/ssllabs-scan@latest
+
+FROM node:20-bookworm
+
+COPY --from=builder /go/bin/ssllabs-scan /usr/local/bin/ssllabs-scan
 
 RUN mkdir -p /usr/src/garie-plugin
 RUN mkdir -p /usr/src/garie-plugin/reports
