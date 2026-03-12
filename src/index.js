@@ -60,15 +60,29 @@ function getResults(url, file) {
         }
     });
 
-    const penalty =
-        severities.INFO * 0 +
-        severities.LOW * 2 +
-        severities.MEDIUM * 6 +
-        severities.HIGH * 15 +
-        severities.CRITICAL * 30 +
-        severities.FATAL * 100;
+    const finalScores = [];
+    const scanResults = Array.isArray(parsed.scanResult) ? parsed.scanResult : [];
 
-    result[key] = Math.max(0, 100 - penalty);
+    scanResults.forEach((scan) => {
+        const rating = Array.isArray(scan.rating) ? scan.rating : [];
+        const finalScoreEntry = rating.find((entry) => entry && entry.id === 'final_score');
+
+        if (!finalScoreEntry || finalScoreEntry.finding === undefined || finalScoreEntry.finding === null) {
+            return;
+        }
+
+        const score = Number(finalScoreEntry.finding);
+        if (!Number.isNaN(score)) {
+            finalScores.push(score);
+        }
+    });
+
+    if (finalScores.length === 0) {
+        console.log(`Did not receive final_score in report for ${url}`);
+        throw (`Did not receive final_score in report for ${url}`);
+    }
+
+    result[key] = finalScores.reduce((a, b) => a + b, 0) / finalScores.length;
     result.testssl_findings = findings.length;
     result.ssl_info = severities.INFO;
     result.ssl_low = severities.LOW;
@@ -105,7 +119,7 @@ const myGetData = async (item) => {
                         params: [ ],
                         callback: myGetFile
                     }
-            data = await garie_plugin.utils.helpers.executeScript(options);
+            const data = await garie_plugin.utils.helpers.executeScript(options);
 
             resolve(data);
         } catch (err) {
