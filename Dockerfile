@@ -1,10 +1,15 @@
-FROM golang:1-bookworm AS builder
-WORKDIR /app
-RUN go install github.com/ssllabs/ssllabs-scan@latest
-
 FROM node:20-bookworm
 
-COPY --from=builder /go/bin/ssllabs-scan /usr/local/bin/ssllabs-scan
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    ca-certificates \
+    openssl \
+    bsdextrautils \
+    dnsutils \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --depth 1 https://github.com/testssl/testssl.sh.git /opt/testssl.sh && \
+    ln -s /opt/testssl.sh/testssl.sh /usr/local/bin/testssl.sh
 
 RUN mkdir -p /usr/src/garie-plugin
 RUN mkdir -p /usr/src/garie-plugin/reports
