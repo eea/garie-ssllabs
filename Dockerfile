@@ -1,5 +1,7 @@
 FROM node:20-bookworm
 
+ARG TESTSSL_VERSION=v3.2.3
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     ca-certificates \
@@ -8,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dnsutils \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 https://github.com/testssl/testssl.sh.git /opt/testssl.sh && \
+RUN git clone --branch ${TESTSSL_VERSION} --depth 1 https://github.com/testssl/testssl.sh.git /opt/testssl.sh && \
     ln -s /opt/testssl.sh/testssl.sh /usr/local/bin/testssl.sh
 
 RUN mkdir -p /usr/src/garie-plugin
